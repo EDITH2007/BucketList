@@ -51,13 +51,6 @@ export default function WorldMap({ items }: Props) {
               ))
             }
           </Geographies>
-
-          {dots.map((dot) => {
-            // Convert lng/lat to the same 0-100% positioning the map projection uses internally
-            // react-simple-maps handles projection for Geography, but for plain overlay dots
-            // we approximate using equirectangular percent positioning matching scale={140}.
-            return null;
-          })}
         </ComposableMap>
 
         {/* Overlay dots positioned with simple equirectangular percent math (matches default Mercator-ish framing closely enough at this zoom level) */}
