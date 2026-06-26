@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+:root {
+  --color-earth: #8B6914;
+  --color-ocean: #1B4B6F;
+  --color-sand: #F5F1E8;
+  --color-forest: #2D5A3D;
+  --color-sunset: #E07B39;
+  --color-night: #1A1A2E;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-sand);
+  color: var(--color-night);
+}
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.travel-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(139, 105, 20, 0.1);
+}
+
+.travel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.category-adventure { border-left: 4px solid #E07B39; }
+.category-culture { border-left: 4px solid #8B6914; }
+.category-food { border-left: 4px solid #D44848; }
+.category-nature { border-left: 4px solid #2D5A3D; }
+.category-relaxation { border-left: 4px solid #1B4B6F; }
+.category-photography { border-left: 4px solid #6B4E71; }
+
+.stamp-complete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 60px;
+  height: 60px;
+  border: 3px solid #2D5A3D;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2D5A3D;
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+  transform: rotate(-15deg);
+  opacity: 0.8;
+}
+
+.map-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-sunset);
+  box-shadow: 0 0 0 4px rgba(224, 123, 57, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(224, 123, 57, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(224, 123, 57, 0.1); }
+}
+
+.timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--color-ocean), var(--color-earth));
+}
