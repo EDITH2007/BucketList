@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "convex"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
