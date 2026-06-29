@@ -1,6 +1,10 @@
 import { Globe, MapPin, Compass } from "lucide-react";
 
-export default function Navbar() {
+interface NavbarProps {
+  onNewAdventure: () => void;
+}
+
+export default function Navbar({ onNewAdventure }: NavbarProps) {
   return (
     <nav className="glass-panel sticky top-0 z-50 border-b border-amber-900/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -10,10 +14,10 @@ export default function Navbar() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-amber-900">
-              Wanderlust List
+              Before I Die
             </h1>
             <p className="text-xs text-amber-700/60 tracking-widest uppercase">
-              Collect Moments, Not Things
+              Live the Story Worth Telling.
             </p>
           </div>
         </div>
@@ -23,7 +27,10 @@ export default function Navbar() {
             <MapPin size={16} />
             <span>Explore the World</span>
           </div>
-          <button className="bg-amber-800 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-amber-900 transition-colors flex items-center gap-2">
+          <button 
+            onClick={onNewAdventure}
+            className="bg-amber-800 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-amber-900 transition-colors flex items-center gap-2"
+          >
             <Compass size={18} />
             New Adventure
           </button>

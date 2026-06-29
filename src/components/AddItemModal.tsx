@@ -10,6 +10,13 @@ interface Props {
   userId: string;
 }
 
+// Helper: Convert number + direction to signed decimal
+function toSignedDecimal(value: string, dir: string): number {
+  const num = parseFloat(value);
+  if (isNaN(num)) return 0;
+  return (dir === "S" || dir === "W") ? -num : num;
+}
+
 export default function AddItemModal({ isOpen, onClose, userId }: Props) {
   const [formData, setFormData] = useState({
     title: "",
@@ -24,6 +31,8 @@ export default function AddItemModal({ isOpen, onClose, userId }: Props) {
     tags: "",
     lat: "",
     lng: "",
+    latDir: "N",   // NEW: N or S
+    lngDir: "E",   // NEW: E or W
   });
 
   const addItem = useMutation(api.bucketList.addItem);
@@ -31,22 +40,26 @@ export default function AddItemModal({ isOpen, onClose, userId }: Props) {
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const { lat, lng, budget, targetDate, tags, ...rest } = formData;
+    e.preventDefault();
+    const { lat, lng, latDir, lngDir, budget, targetDate, tags, ...rest } = formData;
 
-  await addItem({
-    ...rest,
-    coordinates: {
-      lat: parseFloat(lat) || 0,
-      lng: parseFloat(lng) || 0,
-    },
-    targetDate: targetDate ? new Date(targetDate).getTime() : undefined,
-    budget: budget ? parseFloat(budget) : undefined,
-    tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-    userId,
-  });
-  onClose();
-};
+    // Convert to signed decimal using the direction
+    const latDecimal = toSignedDecimal(lat, latDir);
+    const lngDecimal = toSignedDecimal(lng, lngDir);
+
+    await addItem({
+      ...rest,
+      coordinates: {
+        lat: latDecimal,
+        lng: lngDecimal,
+      },
+      targetDate: targetDate ? new Date(targetDate).getTime() : undefined,
+      budget: budget ? parseFloat(budget) : undefined,
+      tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+      userId,
+    });
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -179,28 +192,49 @@ export default function AddItemModal({ isOpen, onClose, userId }: Props) {
             </div>
           </div>
 
+          {/* ====== UPDATED LATITUDE & LONGITUDE WITH DIRECTION DROPDOWNS ====== */}
           <div className="grid grid-cols-2 gap-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Latitude</label>
-              <input
-                type="number"
-                step="any"
-                placeholder="e.g., 64.1466"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
-                value={formData.lat}
-                onChange={(e) => setFormData({ ...formData, lat: e.target.value })}
-              />
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="e.g., 36.0423"
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
+                  value={formData.lat}
+                  onChange={(e) => setFormData({ ...formData, lat: e.target.value })}
+                />
+                <select
+                  className="px-3 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 outline-none bg-white"
+                  value={formData.latDir}
+                  onChange={(e) => setFormData({ ...formData, latDir: e.target.value })}
+                >
+                  <option value="N">N</option>
+                  <option value="S">S</option>
+                </select>
+              </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Longitude</label>
-              <input
-                type="number"
-                step="any"
-                placeholder="e.g., -21.9426"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
-                value={formData.lng}
-                onChange={(e) => setFormData({ ...formData, lng: e.target.value })}
-              />
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="e.g., 138.0838"
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all"
+                  value={formData.lng}
+                  onChange={(e) => setFormData({ ...formData, lng: e.target.value })}
+                />
+                <select
+                  className="px-3 py-2.5 rounded-xl border border-gray-200 focus:border-amber-500 outline-none bg-white"
+                  value={formData.lngDir}
+                  onChange={(e) => setFormData({ ...formData, lngDir: e.target.value })}
+                >
+                  <option value="E">E</option>
+                  <option value="W">W</option>
+                </select>
+              </div>
             </div>
           </div>
 

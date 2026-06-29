@@ -17,7 +17,7 @@ function App() {
   return (
     <ConvexProvider client={convex}>
       <div className="min-h-screen bg-[#F5F1E8]">
-        <Navbar />
+       <Navbar onNewAdventure={() => setIsModalOpen(true)} />
         
         <main className="max-w-7xl mx-auto px-6 py-8">
           <StatsDashboard userId={USER_ID} />
